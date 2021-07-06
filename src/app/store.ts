@@ -1,17 +1,15 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import { configureStore } from '@reduxjs/toolkit'
+import taskReducer from '../features/task/taskSlice'
+import { taskApi } from '../features/task/taskApi'
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    task: taskReducer,
+    [taskApi.reducerPath]: taskApi.reducer,
   },
-});
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(taskApi.middleware),
+})
 
-export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>
